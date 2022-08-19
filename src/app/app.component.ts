@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent {
-  title = 'copa-mundo';
+  title = 'Copa do Mundo 2022';
 }
