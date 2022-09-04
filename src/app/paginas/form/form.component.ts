@@ -1,5 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Cep } from 'src/app/models/cep';
 import { Cliente } from 'src/app/models/cliente';
+import { CepServico } from 'src/app/servicos/cepServico';
 
 @Component({
   selector: 'app-form',
@@ -8,26 +11,27 @@ import { Cliente } from 'src/app/models/cliente';
 })
 export class FormComponent implements OnInit {
 
-  constructor() { }
+  constructor(private http:HttpClient) { }
 
   ngOnInit(): void {
   }
 
-  public cliente: Cliente = {
-    id: 1,
-    nome:"Maykon",
-    email: "maykonaraujo23@gmail.com",
-    senha: "1234",
-    cep: "66610290",
-    endereco: "Rua ventinário",
-    numero: 12,
-    bairro: "Curio",
-    cidade: "Jacundá",
-    estado: "PA",
+  public cliente: Cliente = {} as Cliente
+
+  public cep:Cep|undefined = {} as Cep
+
+  public salvar(){
+    console.log(this.cliente);
   }
 
-  public mostrarModelo(){
-    console.log(this.cliente);
+  public async buscaViaCep() {
+    this.cep = await new CepServico(this.http).getViaCep(this.cliente.cep)
+    if(this.cep){
+      this.cliente.endereco = this.cep.logradouro
+      this.cliente.bairro = this.cep.bairro
+      this.cliente.cidade = this.cep.localidade
+      this.cliente.estado = this.cep.uf
+    }
   }
 
 }
