@@ -1,14 +1,18 @@
+import { HttpClient } from '@angular/common/http';
+
 import { Cliente } from '../models/cliente';
 
+ 
+
 export class ClienteServico{
-    private static clientes: Cliente [] = []
+    constructor(private http: HttpClient){}
     
-    public static salvar(cliente:Cliente){
-        ClienteServico.clientes.push(cliente);
+    public async salvar(cliente:Cliente){
+        await this.http.post<Cliente>("http://localhost:8080/clientes.json", cliente).toPromise()
     }
 
-    public static all(){
-        return ClienteServico.clientes;
+    public  async all(){
+       return await this.http.get<Cliente[]>("http://localhost:8080/clientes.json").toPromise()
     }
     
 }
